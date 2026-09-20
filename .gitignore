@@ -1,0 +1,38 @@
+# .NET
+backend/**/bin/
+backend/**/obj/
+tests/backend/**/bin/
+tests/backend/**/obj/
+*.user
+
+# SQLite database (generated at runtime, deterministic seed applied automatically)
+backend/PatientManagement.Api/app.db
+backend/PatientManagement.Api/app.db-shm
+backend/PatientManagement.Api/app.db-wal
+**/app.db
+**/app.db-shm
+**/app.db-wal
+
+# Angular / Node
+frontend/**/node_modules/
+frontend/**/dist/
+frontend/**/.angular/
+tests/e2e/node_modules/
+
+# Playwright
+tests/e2e/test-results/
+tests/e2e/playwright-report/
+tests/e2e/playwright/.cache/
+
+# Logs
+*.log
+backend-run.log
+frontend-run.log
+
+# Screenshots / scratch
+screenshots/
+
+# IDE
+.vs/
+.vscode/*
+!.vscode/extensions.json

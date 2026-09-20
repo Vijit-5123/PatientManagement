@@ -1,0 +1,12 @@
+<mat-toolbar color="primary" class="app-toolbar">
+  <span class="app-title">
+    <a routerLink="/patients">Patient Management System</a>
+  </span>
+  <span class="spacer"></span>
+  @if (currentUser(); as user) {
+    <span class="user-info" data-testid="current-user">
+      {{ user.username }} ({{ user.role }})
+    </span>
+    <button mat-stroked-button (click)="logout()" data-testid="logout-button">Logout</button>
+  }
+</mat-toolbar>

@@ -1,0 +1,46 @@
+<div class="login-page">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Patient Management System</mat-card-title>
+      <mat-card-subtitle>Sign in to continue</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" name="username" autocomplete="username" data-testid="login-username" />
+          @if (form.controls.username.invalid && form.controls.username.touched) {
+            <mat-error>Username is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" name="password" autocomplete="current-password" data-testid="login-password" />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <mat-error>Password is required.</mat-error>
+          }
+        </mat-form-field>
+
+        @if (errorMessage()) {
+          <p class="error-message" role="alert" data-testid="login-error">{{ errorMessage() }}</p>
+        }
+
+        <button mat-flat-button color="primary" type="submit" class="full-width" [disabled]="isLoading()" data-testid="login-submit">
+          @if (isLoading()) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            Sign in
+          }
+        </button>
+      </form>
+
+      <div class="dev-credentials">
+        <p><strong>Development test users</strong></p>
+        <p>Admin: <code>admin</code> / <code>Admin123!</code></p>
+        <p>Doctor: <code>doctor</code> / <code>Doctor123!</code></p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

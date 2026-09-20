@@ -1,0 +1,95 @@
+<div class="patient-list-page">
+  <div class="page-header">
+    <h1>Patients</h1>
+    @if (canCreate()) {
+      <button mat-flat-button color="primary" routerLink="/patients/new" data-testid="patient-create">
+        <mat-icon>add</mat-icon>
+        New Patient
+      </button>
+    }
+  </div>
+
+  <form class="search-bar" (ngSubmit)="onSearchSubmit()" novalidate>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search patients</mat-label>
+      <input matInput [(ngModel)]="searchQuery" name="search" placeholder="Name, MRN, or email" data-testid="patient-search-input" />
+    </mat-form-field>
+    <button mat-stroked-button type="submit" data-testid="patient-search-submit">Search</button>
+  </form>
+
+  @if (isLoading()) {
+    <div class="state-container" data-testid="patients-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading patients...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="state-container error" data-testid="patients-error">
+      <p>{{ errorMessage() }}</p>
+      <button mat-stroked-button (click)="loadPatients()">Retry</button>
+    </div>
+  } @else if (patients().length === 0) {
+    <div class="state-container" data-testid="patients-empty">
+      <p>No patients found.</p>
+    </div>
+  } @else {
+    <table mat-table [dataSource]="patients()" class="patients-table" data-testid="patients-table">
+      <ng-container matColumnDef="medicalRecordNumber">
+        <th mat-header-cell *matHeaderCellDef>MRN</th>
+        <td mat-cell *matCellDef="let patient">{{ patient.medicalRecordNumber }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let patient">{{ patient.lastName }}, {{ patient.firstName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dateOfBirth">
+        <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+        <td mat-cell *matCellDef="let patient">{{ patient.dateOfBirth }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="gender">
+        <th mat-header-cell *matHeaderCellDef>Gender</th>
+        <td mat-cell *matCellDef="let patient">{{ patient.gender }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Phone</th>
+        <td mat-cell *matCellDef="let patient">{{ patient.phone || '—' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let patient">{{ patient.email || '—' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let patient">
+          <a mat-icon-button [routerLink]="['/patients', patient.id]" [attr.data-testid]="'patient-view-' + patient.id" aria-label="View patient">
+            <mat-icon>visibility</mat-icon>
+          </a>
+          <a mat-icon-button [routerLink]="['/patients', patient.id, 'edit']" [attr.data-testid]="'patient-edit-' + patient.id" aria-label="Edit patient">
+            <mat-icon>edit</mat-icon>
+          </a>
+          @if (canDelete()) {
+            <button mat-icon-button (click)="confirmDelete(patient)" [attr.data-testid]="'patient-delete-' + patient.id" aria-label="Delete patient">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="totalCount()"
+      [pageSize]="pageSize()"
+      [pageIndex]="page() - 1"
+      [pageSizeOptions]="[10, 20, 50]"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  }
+</div>

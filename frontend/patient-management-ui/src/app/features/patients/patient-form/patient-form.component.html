@@ -1,0 +1,103 @@
+<div class="patient-form-page">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ isEditMode() ? 'Edit Patient' : 'New Patient' }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (isLoading()) {
+        <div class="state-container" data-testid="patient-form-loading">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate data-testid="patient-form">
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" data-testid="patient-firstName" />
+              @if (form.controls.firstName.invalid && form.controls.firstName.touched) {
+                <mat-error>First name is required.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" data-testid="patient-lastName" />
+              @if (form.controls.lastName.invalid && form.controls.lastName.touched) {
+                <mat-error>Last name is required.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Date of Birth</mat-label>
+              <input matInput type="date" formControlName="dateOfBirth" data-testid="patient-dateOfBirth" />
+              @if (form.controls.dateOfBirth.invalid && form.controls.dateOfBirth.touched) {
+                <mat-error>Date of birth is required.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Gender</mat-label>
+              <mat-select formControlName="gender" data-testid="patient-gender">
+                <mat-option value="Male">Male</mat-option>
+                <mat-option value="Female">Female</mat-option>
+                <mat-option value="Other">Other</mat-option>
+              </mat-select>
+              @if (form.controls.gender.invalid && form.controls.gender.touched) {
+                <mat-error>Gender is required.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Phone</mat-label>
+              <input matInput formControlName="phone" data-testid="patient-phone" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email" data-testid="patient-email" />
+              @if (form.controls.email.invalid && form.controls.email.touched) {
+                <mat-error>Enter a valid email address.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Address</mat-label>
+              <input matInput formControlName="address" data-testid="patient-address" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>City</mat-label>
+              <input matInput formControlName="city" data-testid="patient-city" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>State</mat-label>
+              <input matInput formControlName="state" data-testid="patient-state" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Postal Code</mat-label>
+              <input matInput formControlName="postalCode" data-testid="patient-postalCode" />
+            </mat-form-field>
+          </div>
+
+          @if (errorMessage()) {
+            <p class="error-message" role="alert" data-testid="patient-form-error">{{ errorMessage() }}</p>
+          }
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="cancel()" data-testid="patient-form-cancel">Cancel</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="isSaving()" data-testid="patient-form-submit">
+              @if (isSaving()) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                {{ isEditMode() ? 'Save Changes' : 'Create Patient' }}
+              }
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,62 @@
+<div class="patient-detail-page">
+  @if (isLoading()) {
+    <div class="state-container" data-testid="patient-detail-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (notFound()) {
+    <div class="state-container" data-testid="patient-detail-notfound">
+      <p>Patient not found.</p>
+      <a mat-button routerLink="/patients">Back to patients</a>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="state-container error" data-testid="patient-detail-error">
+      <p>{{ errorMessage() }}</p>
+      <button mat-stroked-button (click)="loadPatient()">Retry</button>
+    </div>
+  } @else if (patient(); as p) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ p.firstName }} {{ p.lastName }}</mat-card-title>
+        <mat-card-subtitle>MRN: {{ p.medicalRecordNumber }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <dl class="detail-grid">
+          <dt>Date of Birth</dt>
+          <dd>{{ p.dateOfBirth }}</dd>
+
+          <dt>Gender</dt>
+          <dd>{{ p.gender }}</dd>
+
+          <dt>Phone</dt>
+          <dd>{{ p.phone || '—' }}</dd>
+
+          <dt>Email</dt>
+          <dd>{{ p.email || '—' }}</dd>
+
+          <dt>Address</dt>
+          <dd>{{ p.address || '—' }}</dd>
+
+          <dt>City</dt>
+          <dd>{{ p.city || '—' }}</dd>
+
+          <dt>State</dt>
+          <dd>{{ p.state || '—' }}</dd>
+
+          <dt>Postal Code</dt>
+          <dd>{{ p.postalCode || '—' }}</dd>
+        </dl>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <a mat-button routerLink="/patients">Back</a>
+        @if (canUpdate()) {
+          <a mat-flat-button color="primary" [routerLink]="['/patients', p.id, 'edit']" data-testid="patient-detail-edit">Edit</a>
+        }
+        @if (canDelete()) {
+          <button mat-stroked-button color="warn" (click)="confirmDelete()" data-testid="patient-detail-delete">Delete</button>
+        }
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>
